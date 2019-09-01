@@ -1,0 +1,7 @@
+group = 'com.walterjwhite.modules.print.providers'
+description = 'print - providers - cups4j'
+dependencies {
+  compile project(':infrastructure:datastore:modules:cli')
+  compile project(':infrastructure:dependencies:cups4j')
+  testCompile project(':infrastructure:dependencies:commons-io')
+}

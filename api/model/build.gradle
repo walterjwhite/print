@@ -1,0 +1,5 @@
+group = 'com.walterjwhite.modules.print.api'
+description = 'print - api - model'
+dependencies {
+  compile project(':infrastructure:datastore:api:model')
+}

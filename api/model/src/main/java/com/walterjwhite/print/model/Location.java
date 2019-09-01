@@ -3,8 +3,17 @@ package com.walterjwhite.print.model;
 import com.walterjwhite.datastore.api.model.entity.AbstractNamedEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /** TODO: migrate this "location" stuff to another project and re-use it here. */
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString(doNotUseGetters = true, callSuper = true)
+// @PersistenceCapable
 @Entity
 public class Location extends AbstractNamedEntity {
   @Column protected String address;
@@ -29,58 +38,6 @@ public class Location extends AbstractNamedEntity {
     this.room = room;
     this.zipCode = zipCode;
     this.state = state;
-    this.country = country;
-  }
-
-  public Location() {
-    super();
-  }
-
-  public String getAddress() {
-    return address;
-  }
-
-  public void setAddress(String address) {
-    this.address = address;
-  }
-
-  public String getFloor() {
-    return floor;
-  }
-
-  public void setFloor(String floor) {
-    this.floor = floor;
-  }
-
-  public String getRoom() {
-    return room;
-  }
-
-  public void setRoom(String room) {
-    this.room = room;
-  }
-
-  public String getZipCode() {
-    return zipCode;
-  }
-
-  public void setZipCode(String zipCode) {
-    this.zipCode = zipCode;
-  }
-
-  public String getState() {
-    return state;
-  }
-
-  public void setState(String state) {
-    this.state = state;
-  }
-
-  public String getCountry() {
-    return country;
-  }
-
-  public void setCountry(String country) {
     this.country = country;
   }
 }

@@ -3,12 +3,9 @@ package service;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Demo {
   public static final int portNumber = 4444;
-  private static final Logger LOGGER = LoggerFactory.getLogger(Demo.class);
 
   public static void main(final String[] arguments) throws IOException, InterruptedException {
     int delta = 5000;

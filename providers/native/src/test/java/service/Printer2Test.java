@@ -7,11 +7,8 @@ import java.io.IOException;
 import javax.print.PrintService;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.printing.PDFPageable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Printer2Test {
-  private static final Logger LOGGER = LoggerFactory.getLogger(Printer2Test.class);
 
   public static void main(final String[] arguments) throws IOException, PrinterException {
     PDDocument doc = PDDocument.load(new File("label.pdf"));
@@ -31,10 +28,10 @@ public class Printer2Test {
     job.setPrintService(selectedPrintService);
     LOGGER.info("selectedPrintService:" + selectedPrintService);
     job.setPageable(new PDFPageable(doc));
-    // job.printDialog();
+    // queuedJob.printDialog();
 
     // doc.sh
 
-    // job.print();
+    // queuedJob.print();
   }
 }

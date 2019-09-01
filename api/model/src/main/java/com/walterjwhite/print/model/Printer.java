@@ -3,7 +3,14 @@ package com.walterjwhite.print.model;
 import com.walterjwhite.datastore.api.model.entity.AbstractNamedEntity;
 import com.walterjwhite.print.enumeration.PrinterType;
 import javax.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+// @PersistenceCapable
+@NoArgsConstructor
 @Entity
 public class Printer extends AbstractNamedEntity {
 
@@ -22,34 +29,6 @@ public class Printer extends AbstractNamedEntity {
 
     this.location = location;
     this.uri = uri;
-    this.printerType = printerType;
-  }
-
-  public Printer() {
-    super();
-  }
-
-  public Location getLocation() {
-    return location;
-  }
-
-  public void setLocation(Location location) {
-    this.location = location;
-  }
-
-  public String getUri() {
-    return uri;
-  }
-
-  public void setUri(String uri) {
-    this.uri = uri;
-  }
-
-  public PrinterType getPrinterType() {
-    return printerType;
-  }
-
-  public void setPrinterType(PrinterType printerType) {
     this.printerType = printerType;
   }
 }

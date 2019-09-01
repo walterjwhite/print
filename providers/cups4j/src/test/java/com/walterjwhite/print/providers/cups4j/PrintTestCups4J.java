@@ -10,7 +10,7 @@ public class PrintTestCups4J {
     // @TODO: inject these parameters / let the user select them
     CupsClient cupsClient = new CupsClient("localhost", 631);
 
-    final byte[] data = FileUtils.readFileToByteArray(new File("/tmp/print-job-test"));
+    final byte[] data = FileUtils.readFileToByteArray(new File("/tmp/print-queuedJob-test"));
     cupsClient.getDefaultPrinter().print(new PrintJob.Builder(data).build());
   }
 }

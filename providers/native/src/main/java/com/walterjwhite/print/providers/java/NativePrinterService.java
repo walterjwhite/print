@@ -1,41 +1,36 @@
 package com.walterjwhite.print.providers.java;
 
-import com.walterjwhite.datastore.criteria.Repository;
+import com.walterjwhite.datastore.api.repository.Repository;
 import com.walterjwhite.file.api.service.FileStorageService;
-import com.walterjwhite.google.guice.property.enumeration.NoOperation;
-import com.walterjwhite.google.guice.property.property.Property;
-import com.walterjwhite.print.api.service.PrinterRepository;
 import com.walterjwhite.print.impl.AbstractPrinterService;
 import com.walterjwhite.print.model.PrintJob;
 import com.walterjwhite.print.model.PrintRequest;
 import com.walterjwhite.print.model.Printer;
+import com.walterjwhite.property.api.enumeration.NoOperation;
+import com.walterjwhite.property.impl.annotation.Property;
 import java.awt.print.Pageable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.util.Arrays;
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.print.*;
+import javax.print.DocFlavor;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.*;
+import javax.print.attribute.standard.Sides;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.printing.PDFPageable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class NativePrinterService extends AbstractPrinterService {
-  private static final Logger LOGGER = LoggerFactory.getLogger(NativePrinterService.class);
-
   // protected final PrintJobRepository printJobRepository;
 
   @Inject
   public NativePrinterService(
       FileStorageService fileStorageService,
       @Property(NoOperation.class) boolean isNooperation,
-      Provider<PrinterRepository> printerRepositoryProvider,
       Provider<Repository> repositoryProvider) {
-    super(isNooperation, fileStorageService, repositoryProvider, printerRepositoryProvider);
+    super(isNooperation, fileStorageService, repositoryProvider);
   }
 
   @Override
@@ -56,8 +51,7 @@ public class NativePrinterService extends AbstractPrinterService {
     return (new PDFPageable(PDDocument.load(new java.io.File(printRequest.getFile().getSource()))));
   }
 
-  protected void doPrint(Printer printer, final Pageable pageable)
-      throws PrintException, PrinterException {
+  protected void doPrint(Printer printer, final Pageable pageable) throws PrinterException {
     java.awt.print.PrinterJob job = PrinterJob.getPrinterJob();
     job.setPrintService(getPrinterService(printer));
     job.setPageable(pageable);
@@ -70,34 +64,30 @@ public class NativePrinterService extends AbstractPrinterService {
     PrintRequestAttributeSet printRequestAttributes = new HashPrintRequestAttributeSet();
     printRequestAttributes.add(Sides.DUPLEX);
 
-    javax.print.PrintService[] printServices =
+    return selectPrintService(printer, getPrintServices(flavor, printRequestAttributes));
+  }
+
+  protected PrintService[] getPrintServices(
+      DocFlavor flavor, PrintRequestAttributeSet printRequestAttributes) {
+    final PrintService[] printServices =
         PrintServiceLookup.lookupPrintServices(flavor, printRequestAttributes);
     if (printServices.length == 0) {
-      throw new IllegalStateException("No Printer found");
+      throw new NoPrintersFoundException(
+          "No Printer found for " + flavor + " and " + printRequestAttributes);
     }
-    LOGGER.info("Available printers: " + Arrays.asList(printServices));
 
-    javax.print.PrintService selectedPrintService = null;
+    return printServices;
+  }
 
-    if (printer.getName() != null) {
-      LOGGER.info("printer:" + printer.getName());
+  protected PrintService selectPrintService(Printer printer, PrintService[] printServices) {
+    if (printer.getName() == null) return printServices[0];
 
-      for (javax.print.PrintService printService : printServices) {
-        LOGGER.info("printer service:" + printService.getName());
-
-        if (printService.getName().equals(printer.getName())) {
-          selectedPrintService = printService;
-          break;
-        }
+    for (javax.print.PrintService printService : printServices) {
+      if (printService.getName().equals(printer.getName())) {
+        return printService;
       }
-    } else {
-      selectedPrintService = printServices[0];
     }
 
-    if (selectedPrintService == null) {
-      throw new IllegalStateException("Printer not found");
-    }
-
-    return (selectedPrintService);
+    throw new NoPrinterSelectedException("Printer not found:" + printer.getName());
   }
 }

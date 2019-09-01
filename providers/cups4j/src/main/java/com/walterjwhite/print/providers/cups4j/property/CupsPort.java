@@ -1,8 +1,8 @@
 package com.walterjwhite.print.providers.cups4j.property;
 
-import com.walterjwhite.google.guice.property.property.DefaultValue;
-import com.walterjwhite.google.guice.property.property.GuiceProperty;
+import com.walterjwhite.property.api.annotation.DefaultValue;
+import com.walterjwhite.property.api.property.ConfigurableProperty;
 
-public interface CupsPort extends GuiceProperty {
+public interface CupsPort extends ConfigurableProperty {
   @DefaultValue int Default = 631;
 }

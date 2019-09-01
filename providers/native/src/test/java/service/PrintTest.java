@@ -7,7 +7,7 @@ import javax.print.PrintException;
 public class PrintTest {
 
   /**
-   * The print job is not scaling and thus is a problem ...
+   * The print queuedJob is not scaling and thus is a problem ...
    *
    * @throws IOException
    * @throws PrinterException

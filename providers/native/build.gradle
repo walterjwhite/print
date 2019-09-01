@@ -1,0 +1,6 @@
+group = 'com.walterjwhite.modules.print.providers'
+description = 'print - providers - native'
+dependencies {
+  compile project(':infrastructure:dependencies:google-guice:core')
+  compile project(':infrastructure:dependencies:commons-io')
+}

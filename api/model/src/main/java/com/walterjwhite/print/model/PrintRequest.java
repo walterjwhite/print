@@ -7,7 +7,13 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+@Data
+@ToString(doNotUseGetters = true)
+// @PersistenceCapable
 @Entity
 public class PrintRequest extends AbstractEntity {
   @ManyToOne(optional = false)
@@ -26,13 +32,13 @@ public class PrintRequest extends AbstractEntity {
   protected LocalDateTime requestDateTime;
 
   /** Password used to decrypt the document (if there is one). */
-  protected String password;
+  @EqualsAndHashCode.Exclude @Transient protected transient String password;
 
-  @Column protected byte[] passwordEncrypted;
+  @EqualsAndHashCode.Exclude @Column protected String passwordEncrypted;
 
-  @Column protected byte[] passwordSalt;
+  @EqualsAndHashCode.Exclude @Column protected String passwordSalt;
 
-  @OneToMany protected Set<PrintJob> printJobs = new HashSet<>();
+  @EqualsAndHashCode.Exclude @OneToMany protected Set<PrintJob> printJobs = new HashSet<>();
 
   public PrintRequest(Location location, PrinterType printerType, File file, String password) {
     this();
@@ -57,93 +63,5 @@ public class PrintRequest extends AbstractEntity {
   public PrintRequest() {
     super();
     requestDateTime = LocalDateTime.now();
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public Set<PrintJob> getPrintJobs() {
-    return printJobs;
-  }
-
-  public void setPrintJobs(Set<PrintJob> printJobs) {
-    this.printJobs = printJobs;
-  }
-
-  public Location getLocation() {
-    return location;
-  }
-
-  public void setLocation(Location location) {
-    this.location = location;
-  }
-
-  public PrinterType getPrinterType() {
-    return printerType;
-  }
-
-  public void setPrinterType(PrinterType printerType) {
-    this.printerType = printerType;
-  }
-
-  public File getFile() {
-    return file;
-  }
-
-  public void setFile(File file) {
-    this.file = file;
-  }
-
-  public LocalDateTime getRequestDateTime() {
-    return requestDateTime;
-  }
-
-  public void setRequestDateTime(LocalDateTime requestDateTime) {
-    this.requestDateTime = requestDateTime;
-  }
-
-  public byte[] getPasswordEncrypted() {
-    return passwordEncrypted;
-  }
-
-  public void setPasswordEncrypted(byte[] passwordEncrypted) {
-    this.passwordEncrypted = passwordEncrypted;
-  }
-
-  public byte[] getPasswordSalt() {
-    return passwordSalt;
-  }
-
-  public void setPasswordSalt(byte[] passwordSalt) {
-    this.passwordSalt = passwordSalt;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    PrintRequest that = (PrintRequest) o;
-
-    if (location != null ? !location.equals(that.location) : that.location != null) return false;
-    if (printerType != that.printerType) return false;
-    if (file != null ? !file.equals(that.file) : that.file != null) return false;
-    return requestDateTime != null
-        ? requestDateTime.equals(that.requestDateTime)
-        : that.requestDateTime == null;
-  }
-
-  @Override
-  public int hashCode() {
-    int result = location != null ? location.hashCode() : 0;
-    result = 31 * result + (printerType != null ? printerType.hashCode() : 0);
-    result = 31 * result + (file != null ? file.hashCode() : 0);
-    result = 31 * result + (requestDateTime != null ? requestDateTime.hashCode() : 0);
-    return result;
   }
 }

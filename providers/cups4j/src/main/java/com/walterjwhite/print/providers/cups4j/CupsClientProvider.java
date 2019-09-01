@@ -1,10 +1,10 @@
 package com.walterjwhite.print.providers.cups4j;
 
-import com.walterjwhite.google.guice.property.property.Property;
 import com.walterjwhite.print.providers.cups4j.property.CupsPassword;
 import com.walterjwhite.print.providers.cups4j.property.CupsPort;
 import com.walterjwhite.print.providers.cups4j.property.CupsServer;
 import com.walterjwhite.print.providers.cups4j.property.CupsUser;
+import com.walterjwhite.property.impl.annotation.Property;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import org.cups4j.CupsClient;
